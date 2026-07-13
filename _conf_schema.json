@@ -1,0 +1,128 @@
+{
+  "enable_heartflow": {
+    "description": "启用心流主动回复",
+    "type": "bool",
+    "default": false,
+    "hint": "启用后，机器人将智能判断群聊消息并主动回复"
+  },
+  "judge_provider_name": {
+    "description": "判断模型提供商",
+    "type": "string",
+    "default": "",
+    "hint": "用于心流判断的小参数模型提供商，建议使用Gemini 2.0 Flash、GPT-4o-mini等快速小模型",
+    "_special": "select_provider"
+  },
+  "reply_threshold": {
+    "description": "回复阈值",
+    "type": "float",
+    "default": 0.6,
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.05,
+    "hint": "综合评分达到此阈值才会主动回复，值越高越严格（0=总是回复，1=从不回复）"
+  },
+  "context_messages_count": {
+    "description": "展示给用户的上下文消息数",
+    "type": "int",
+    "default": 5,
+    "min": 1,
+    "max": 30,
+    "hint": "在发送给大模型生成回复时，展示的最近消息数量"
+  },
+  "judge_context_count": {
+    "description": "判断模型上下文条数",
+    "type": "int",
+    "default": 10,
+    "min": 1,
+    "max": 50,
+    "hint": "传给判断模型的对话历史条数，建议设置比'上下文消息数'更大的值以提升判断质量"
+  },
+  "whitelist_enabled": {
+    "description": "启用群聊白名单",
+    "type": "bool",
+    "default": false,
+    "hint": "启用后只有白名单中的群聊才会触发心流回复"
+  },
+  "chat_whitelist": {
+    "description": "群聊白名单列表",
+    "type": "list",
+    "default": [],
+    "hint": "允许心流回复的群聊SID列表，可通过 /sid 命令获取"
+  },
+  "judge_relevance": {
+    "description": "权重：内容相关度",
+    "type": "float",
+    "default": 0.25,
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.05,
+    "hint": "消息是否有趣、有价值、适合机器人回复（默认25%）"
+  },
+  "judge_willingness": {
+    "description": "权重：回复意愿",
+    "type": "float",
+    "default": 0.2,
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.05,
+    "hint": "基于当前状态，机器人回复此消息的意愿（默认20%）"
+  },
+  "judge_social": {
+    "description": "权重：社交适宜性",
+    "type": "float",
+    "default": 0.2,
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.05,
+    "hint": "在当前群聊氛围下回复是否合适（默认20%）"
+  },
+  "judge_timing": {
+    "description": "权重：时机恰当性",
+    "type": "float",
+    "default": 0.15,
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.05,
+    "hint": "回复时机是否恰当，距离上次回复的时间间隔（默认15%）"
+  },
+  "judge_continuity": {
+    "description": "权重：对话连贯性",
+    "type": "float",
+    "default": 0.2,
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.05,
+    "hint": "当前消息与对话历史的逻辑关联程度（默认20%）"
+  },
+  "judge_include_reasoning": {
+    "description": "返回判断理由",
+    "type": "bool",
+    "default": true,
+    "hint": "让判断模型返回详细理由，便于调试。关闭可轻微提升性能"
+  },
+  "judge_max_retries": {
+    "description": "JSON解析失败重试次数",
+    "type": "int",
+    "default": 3,
+    "min": 0,
+    "max": 10,
+    "hint": "当判断模型返回无效JSON时的重试次数，设为0时不重试"
+  },
+  "immersive_mode_duration": {
+    "description": "沉浸模式持续时间",
+    "type": "int",
+    "default": 30,
+    "min": 0,
+    "max": 300,
+    "hint": "Bot回复后进入沉浸模式的持续时间（秒）。沉浸模式下使用简化判断逻辑，直接判断是否回复而非评分。设为0可禁用沉浸模式"
+  },
+  "judgment_paused_timeout": {
+    "description": "判断暂停超时时间",
+    "type": "int",
+    "default": 60,
+    "min": 5,
+    "max": 300,
+    "step": 5,
+    "hint": "Bot判定要回复后暂停小模型判断的超时保护时间（秒）。超时后自动恢复判断，防止Bot未实际回复导致永久暂停。建议设置为Bot回复处理的最大耗时的2-3倍"
+  }
+}
