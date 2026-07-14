@@ -23,7 +23,7 @@
 
 **方式一：AstrBot 插件市场**
 
-在 AstrBot 管理面板 → 插件市场 → 搜索「xinliuchenjinba」→ 安装
+在 AstrBot 管理面板 → 插件市场 → 搜索「xinliuchenjinban」→ 安装
 
 **方式二：手动安装**
 
