@@ -19,22 +19,6 @@
 
 ---
 
-## 📋 工作流程
-
-群聊消息 → 心流判断系统 → 是否回复？
-│
-┌───────────┴───────────┐
-▼ ▼
-✅ 回复 ❌ 沉默
-│ │
-┌───────┴───────┐ │
-▼ ▼ ▼
-激活沉浸模式 暂停判断保护 继续监听
-刷新倒计时 等待Bot回复
-
-
----
-
 ## 🛠️ 安装
 
 **方式一：AstrBot 插件市场**
@@ -45,7 +29,7 @@
 
 ```bash
 cd AstrBot/data/plugins
-git clone https://github.com/your-username/heartflow-plugin.git heartflow
+git clone https://github.com/2845075734-ai/xinliuchenjinban
 重启 AstrBot 即可。
 
 ⚙️ 配置说明
