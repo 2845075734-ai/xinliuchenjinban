@@ -5,7 +5,7 @@ desc: 修改自心流插件，自编辑小模型判断提示词，也可留空�
 version: 1.2.1
 author: yikexing
 repo: https://github.com/2845075734-ai/xinliuchenjinban
-astrbot_version: ">=4.25.0"
+astrbot_version: ">=4.16,<5"
 support_platforms:
   - aiocqhttp
 category: AI 增强
