@@ -1,4 +1,14 @@
-name: 心流插件沉浸版
-description: "基于简单的心流机制的群聊主动回复插件，增加沉浸系统"
-author: Jason.Joestar
+name: astrbot_plugin_xinliuchenjinban
+display_name: 心流沉浸版 
+# short_desc: 修改自心流插件
+desc: 自编辑小模型判断提示词，也可留空直接用默认提示词，增加动态阈值，使群聊活跃度低时更主动，避免冷场，群聊活跃度高时少说话，避免打扰别人聊天。增加沉浸模式，使对话更连贯，更热烈。两项功能都配置了独立开关。
 version: 1.0.0
+author: yikexing
+repo: https://github.com/2845075734-ai/xinliuchenjinban
+# astrbot_version: ">=4.25.0"
+# support_platforms:
+#   - aiocqhttp
+#   - qq_official
+# social_link:
+# tags:
+  # - example
