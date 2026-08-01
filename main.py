@@ -1256,8 +1256,9 @@ class HeartflowPlugin(star.Star):
             f"| 模式: {mode_name}"
         )
 
-    @filter.command("heartflow", help="查看心流插件当前运行状态，包括回复统计、阈值、活跃度、沉浸模式和判断暂停状态")
+    @filter.command("heartflow", help="查看心流插件运行状态")
     async def heartflow_status(self, event: AstrMessageEvent):
+        """查看心流状态"""
         umo = event.unified_msg_origin
         s = self._get_chat_state(umo)
 
@@ -1318,8 +1319,9 @@ class HeartflowPlugin(star.Star):
 💡 提示: 使用 /heartflow_debug 查看消息记录
 """))
 
-    @filter.command("heartflow_debug", help="查看当前群最近的心流消息缓冲记录，用于排查主动回复判断是否正常")
+    @filter.command("heartflow_debug", help="查看最近的消息记录（调试用）")
     async def heartflow_debug(self, event: AstrMessageEvent):
+        """查看最近心流消息记录"""
         umo = event.unified_msg_origin
         msgs = self._get_raw_buffer(umo)
 
@@ -1346,8 +1348,9 @@ class HeartflowPlugin(star.Star):
 
         event.set_result(event.plain_result("\n".join(lines)))
 
-    @filter.command("heartflow_clear", help="清空当前群的心流消息缓冲区，让后续判断重新积累上下文")
+    @filter.command("heartflow_clear", help="清除当前群的消息缓冲区")
     async def heartflow_clear_buffer(self, event: AstrMessageEvent):
+        """清空心流消息缓冲区"""
         umo = event.unified_msg_origin
 
         with self._lock:
@@ -1363,8 +1366,9 @@ class HeartflowPlugin(star.Star):
                 event.set_result(event.plain_result("📭 缓冲区为空，无需清除"))
 
     @filter.permission_type(filter.PermissionType.ADMIN)
-    @filter.command("heartflow_reset", help="重置当前群全部心流状态，包括统计数据、消息缓冲、沉浸模式和判断暂停状态，仅管理员可用")
+    @filter.command("heartflow_reset", help="重置当前群的所有心流状态（管理员）")
     async def heartflow_reset(self, event: AstrMessageEvent):
+        """重置心流状态"""
         cid = event.unified_msg_origin
 
         state = self._get_chat_state(cid)
@@ -1390,8 +1394,9 @@ class HeartflowPlugin(star.Star):
             f"💡 心流将从零开始重新计数"
         ))
 
-    @filter.command("heartflow_help", help="查看心流插件的完整命令说明和功能介绍")
+    @filter.command("heartflow_help", help="显示心流插件所有命令说明")
     async def heartflow_help(self, event: AstrMessageEvent):
+        """查看心流插件帮助"""
         help_text = """
 🔮 **心流插件 - 命令帮助**
 ━━━━━━━━━━━━━━
@@ -1399,21 +1404,21 @@ class HeartflowPlugin(star.Star):
 📋 **可用命令**
 
 • `/heartflow`
-  查看心流插件的运行状态、统计数据和当前配置
+  查看当前群的心流运行状态，包括消息统计、回复次数、回复率、当前阈值、活跃度、沉浸模式状态和判断暂停状态
 
 • `/heartflow_debug`
-  显示最近20条消息记录，用于调试心流判断逻辑
+  查看当前群最近的消息缓冲记录，最多显示20条，用于调试主动回复判断逻辑
 
 • `/heartflow_clear`
-  清除当前群的消息缓冲区
+  清空当前群的消息缓冲区，心流判断会从新的聊天内容重新积累上下文
 
 • `/heartflow_reset` 🔒管理员
-  完全重置心流状态
+  重置当前群的全部心流状态，包括消息统计、回复统计、缓冲区、沉浸模式和判断暂停状态
 
 • `/heartflow_help`
-  显示本帮助信息
+  显示心流插件的完整命令帮助和功能说明
 
-━━━━━━
+━━━━━━━━━━━━━━
 
 📖 **功能说明**
 
