@@ -2,7 +2,7 @@
 心流插件所有 Notable 变更都将记录在此文件中。
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/)，版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/) 规范。
 
-## [1.2.4]
+## [1.2.5]
 ### Added
 - 核心需求变更：只要心流判断触发Bot回复意图，无论Bot最终是否输出有效内容，都会立即开启/刷新沉浸模式，不再依赖Bot实际有回复才激活
 
