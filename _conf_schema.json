@@ -15,7 +15,7 @@
   "judge_prompt": {
     "description": "评判提示词",
     "type": "text",
-    "default": "你是群聊机器人决策系统，判断机器人是否应该回复消息。\n\n## 重要规则\n- 所有评分必须在 {score_min} 到 {score_max} 之间。\n- 不要给出0分，最低分为 {score_min} 分。\n- 即使完全不相关，也至少给 {score_min} 分。\n\n## 评分维度\n\n### 1. relevance 内容相关度\n消息内容是否适合机器人参与讨论。\n\n低分情况：\n- 表情包、语气词、哈哈、嗯\n- 完全无关的私人话题\n- 群内专属梗\n\n高分情况：\n- 消息涉及机器人能回答的话题\n- 消息是提问句\n- 消息有信息价值，机器人可以补充有用内容\n\n### 2. willingness 回复意愿\n机器人是否想回复。\n\n低分情况：\n- 负面情绪宣泄，介入不合适\n- 两人私密对话\n- 机器人刚回复过，不应频繁插话\n\n高分情况：\n- 消息有趣或有深度\n- 消息是求助类\n- 机器人较久未回复，有参与意愿\n\n### 3. social 社交适宜性\n回复是否符合群聊氛围。\n\n低分情况：\n- 群内严肃讨论\n- 管理员发言\n- 两人正在对话，强行插入不合适\n\n高分情况：\n- 群内氛围活跃，多人参与\n- 消息是对群体说的\n- 机器人回复能活跃气氛\n\n### 4. timing 时机恰当性\n回复时机是否合适。\n\n低分情况：\n- 距上次回复不足1分钟\n- 发送者可能还有后续补充\n- 多人快速聊天中\n\n高分情况：\n- 距上次回复已过3分钟以上\n- 消息刚发出，适合快速回应\n- 群内长时间无人回复，适合打破沉默\n\n### 5. continuity 对话连贯性\n与对话历史的逻辑关联度。\n\n低分情况：\n- 突然转换话题\n- 机器人已收尾的对话\n- 消息是对其他用户的回复\n\n高分情况：\n- 消息是对机器人上一条回复的直接回应\n- 消息延续机器人开启的话题\n- 对话链路清晰\n\n## 待判断消息\n[{sender_name}] {message}\n\n## 当前状态\n- 群聊ID: {chat_id}\n- 上次回复: {minutes_since_reply}分钟前\n- 状态: {chat_context}\n- 对话流: {chat_flow}\n- 上次Bot回复: {last_bot_reply}\n- 活跃度: {activity_desc} ({activity_level:.0%})\n\n## 综合判断\n阈值: {threshold}\n分数范围: {score_min}-{score_max}分\n\n## 返回格式\n严格返回 JSON：\n{{\"relevance\": 分数, \"willingness\": 分数, \"social\": 分数, \"timing\": 分数, \"continuity\": 分数{reasoning_part}}}",
+    "default": "小模型评分判断提示词",
     "hint": "告诉判断模型评分维度和标准的提示词。留空则使用内置默认模板。支持变量: {sender_name}, {message}, {chat_id}, {minutes_since_reply}, {chat_context}, {chat_flow}, {last_bot_reply}, {threshold}, {reasoning_part}, {activity_level}, {activity_desc}, {score_min}, {score_max}, {mid}"
   },
   "reply_threshold": {
