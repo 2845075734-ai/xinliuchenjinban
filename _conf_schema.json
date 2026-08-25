@@ -6,7 +6,7 @@
     "hint": "启用后，机器人将智能判断群聊消息并主动回复"
   },
   "judge_provider_name": {
-    "description": "判断模型提供商",
+    "description":
     "type": "string",
     "default": "",
     "hint": "用于心流判断的小参数模型提供商，建议使用快速小模型",
