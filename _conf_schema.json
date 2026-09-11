@@ -1,0 +1,258 @@
+{
+  "enable_heartflow": {
+    "description": "启用心流主动回复",
+    "type": "bool",
+    "default": false,
+    "hint": "启用后，机器人将智能判断群聊消息并主动回复"
+  },
+  "judge_provider_name": {
+    "description": "判断模型提供商",
+    "type": "string",
+    "default": "",
+    "hint": "用于心流判断的小参数模型提供商，建议使用快速小模型",
+    "_special": "select_provider"
+  },
+  "reply_threshold": {
+    "description": "基础回复阈值",
+    "type": "float",
+    "default": 0.6,
+    "slider": { "min": 0.0, "max": 1.0, "step": 0.05 },
+    "hint": "综合评分达到此阈值才会主动回复（开启动态阈值后作为基准值）"
+  },
+  "enable_dynamic_threshold": {
+    "description": "启用动态阈值",
+    "type": "bool",
+    "default": false,
+    "hint": "启用后，回复阈值会根据群聊活跃度自动调整。活跃时阈值升高（少说话），冷淡时阈值降低（多说话）"
+  },
+  "dynamic_threshold_max": {
+    "description": "动态阈值上限",
+    "type": "float",
+    "default": 0.85,
+    "slider": { "min": 0.5, "max": 1.0, "step": 0.05 },
+    "hint": "群聊非常活跃时阈值上限，越高等于越不想说话"
+  },
+  "dynamic_threshold_min": {
+    "description": "动态阈值下限",
+    "type": "float",
+    "default": 0.35,
+    "slider": { "min": 0.0, "max": 0.5, "step": 0.05 },
+    "hint": "群聊冷清时阈值下限，越低等于越想说话"
+  },
+  "dynamic_activity_window": {
+    "description": "活跃度计算窗口（秒）",
+    "type": "int",
+    "default": 300,
+    "slider": { "min": 60, "max": 600, "step": 60 },
+    "hint": "计算群聊活跃度时统计最近多长时间的消息（建议 1~10 分钟）"
+  },
+  "dynamic_activity_weights": {
+    "description": "活跃度计算权重",
+    "type": "string",
+    "default": "0.4,0.3,0.3",
+    "hint": "消息频率、消息间隔、参与人数的权重，用逗号分隔"
+  },
+  "group_threshold_configs": {
+    "type": "template_list",
+    "description": "群聊独立阈值配置",
+    "hint": "为特定群聊配置独立的固定阈值和动态阈值上下限，优先级高于全局设置。chat_id 可填完整 unified_msg_origin 或纯群号",
+    "templates": {
+      "group_config": {
+        "name": "群聊阈值配置",
+        "display_item": "chat_id",
+        "items": {
+          "chat_id": {
+            "description": "群聊标识",
+            "type": "string",
+            "default": "",
+            "hint": "填写 unified_msg_origin 或纯群号"
+          },
+          "reply_threshold": {
+            "description": "基础回复阈值",
+            "type": "float",
+            "default": 0.6,
+            "slider": { "min": 0.0, "max": 1.0, "step": 0.05 }
+          },
+          "dynamic_threshold_max": {
+            "description": "动态阈值上限",
+            "type": "float",
+            "default": 0.85,
+            "slider": { "min": 0.5, "max": 1.0, "step": 0.05 }
+          },
+          "dynamic_threshold_min": {
+            "description": "动态阈值下限",
+            "type": "float",
+            "default": 0.35,
+            "slider": { "min": 0.0, "max": 0.5, "step": 0.05 }
+          }
+        }
+      }
+    }
+  },
+  "context_messages_count": {
+    "description": "对话流分析消息数",
+    "type": "int",
+    "default": 5,
+    "slider": { "min": 1, "max": 50, "step": 1 },
+    "hint": "小模型分析对话流（话题提取、连续性判断）时读取的最近消息条数"
+  },
+  "judge_context_count": {
+    "description": "判断模型上下文条数",
+    "type": "int",
+    "default": 10,
+    "slider": { "min": 1, "max": 50, "step": 1 },
+    "hint": "传给小模型评分的历史对话条数"
+  },
+  "whitelist_enabled": {
+    "description": "启用群聊白名单",
+    "type": "bool",
+    "default": false,
+    "hint": "启用后只有白名单中的群聊才会触发心流回复"
+  },
+  "chat_whitelist": {
+    "description": "群聊白名单列表",
+    "type": "list",
+    "default": [],
+    "hint": "允许心流回复的群聊 unified_msg_origin 列表"
+  },
+  "judge_rules": {
+    "type": "template_list",
+    "description": "评分规则配置",
+    "hint": "分别为 5 个评分维度设置低分情况和高分情况的汉字描述，生成评判提示词时使用",
+    "default": [
+      {
+        "__template_key": "rule",
+        "dimension_name": "relevance",
+        "dimension_display": "内容相关度",
+        "weight": 0.25,
+        "low_desc": "表情包、语气词、哈哈、嗯、完全无关的私人话题、群内专属梗",
+        "high_desc": "涉及机器人能回答的话题、提问句、有信息价值"
+      },
+      {
+        "__template_key": "rule",
+        "dimension_name": "willingness",
+        "dimension_display": "回复意愿",
+        "weight": 0.2,
+        "low_desc": "负面情绪宣泄、两人私密对话、机器人刚回复过",
+        "high_desc": "消息有趣或有深度、求助类、机器人较久未回复"
+      },
+      {
+        "__template_key": "rule",
+        "dimension_name": "social",
+        "dimension_display": "社交适宜性",
+        "weight": 0.2,
+        "low_desc": "严肃讨论、管理员发言、两人正在对话强行插入",
+        "high_desc": "氛围活跃多人参与、对群体说的、能活跃气氛"
+      },
+      {
+        "__template_key": "rule",
+        "dimension_name": "timing",
+        "dimension_display": "时机恰当性",
+        "weight": 0.15,
+        "low_desc": "距上次回复不足1分钟、发送者可能还有后续、多人快速聊天",
+        "high_desc": "距上次已过3分钟以上、消息刚发出、长时间无人回复"
+      },
+      {
+        "__template_key": "rule",
+        "dimension_name": "continuity",
+        "dimension_display": "对话连贯性",
+        "weight": 0.2,
+        "low_desc": "突然转换话题、已收尾的对话、明显是对其他群友回复",
+        "high_desc": "对机器人回复的回应/追问/反驳、延续机器人话题、提及机器人说过的内容"
+      }
+    ],
+    "templates": {
+      "rule": {
+        "name": "评分规则",
+        "display_item": "dimension_display",
+        "items": {
+          "dimension_name": {
+            "description": "维度标识（英文）",
+            "type": "string",
+            "default": "",
+            "hint": "必填，与代码中逻辑对应，一般不需修改",
+            "invisible": true
+          },
+          "dimension_display": {
+            "description": "维度中文名",
+            "type": "string",
+            "default": "",
+            "hint": "在提示词中显示的维度名称"
+          },
+          "weight": {
+            "description": "权重 (0-1)",
+            "type": "float",
+            "default": 0.2,
+            "slider": { "min": 0.0, "max": 1.0, "step": 0.05 },
+            "hint": "此维度在综合评分中的占比"
+          },
+          "low_desc": {
+            "description": "低分情况描述",
+            "type": "text",
+            "default": "",
+            "hint": "描述哪些情况应该给低分（输入汉字，如：表情包、语气词）"
+          },
+          "high_desc": {
+            "description": "高分情况描述",
+            "type": "text",
+            "default": "",
+            "hint": "描述哪些情况应该给高分（输入汉字，如：提问句、有信息价值）"
+          }
+        }
+      }
+    }
+  },
+  "judge_include_reasoning": {
+    "description": "返回判断理由",
+    "type": "bool",
+    "default": true,
+    "hint": "让判断模型返回详细理由，便于调试"
+  },
+  "enable_detailed_log": {
+    "description": "启用详细日志",
+    "type": "bool",
+    "default": false,
+    "hint": "开启后输出每次小模型判断的完整日志"
+  },
+  "judge_max_retries": {
+    "description": "JSON解析失败重试次数",
+    "type": "int",
+    "default": 3,
+    "slider": { "min": 0, "max": 5, "step": 1 },
+    "hint": "当判断模型返回无效JSON时的重试次数（建议不超过5次，以免浪费API额度）"
+  },
+  "immersive_mode_duration": {
+    "description": "沉浸模式持续时间",
+    "type": "int",
+    "default": 30,
+    "slider": { "min": 0, "max": 300, "step": 10 },
+    "hint": "Bot回复后进入沉浸模式的持续时间（秒）。设为0禁用"
+  },
+  "judgment_paused_timeout": {
+    "description": "判断暂停超时时间",
+    "type": "int",
+    "default": 60,
+    "slider": { "min": 15, "max": 300, "step": 15 },
+    "hint": "Bot判定要回复后暂停小模型判断的超时时间，防止永久暂停"
+  },
+  "enable_debounce": {
+    "description": "启用回复防抖延迟",
+    "type": "bool",
+    "default": true,
+    "hint": "启用后，Bot判定需要回复时会延迟N秒，防止用户话没说完就插嘴"
+  },
+  "debounce_delay": {
+    "description": "基础防抖延迟（秒）",
+    "type": "float",
+    "default": 2.0,
+    "slider": { "min": 0.5, "max": 10.0, "step": 0.5 },
+    "hint": "判定需要回复后，等待多少秒再实际触发"
+  },
+  "max_debounce_wait": {
+    "description": "最大防抖等待（秒）",
+    "type": "float",
+    "default": 5.0,
+    "slider": { "min": 1.0, "max": 15.0, "step": 0.5 },
+    "hint": "即使用户一直连续发消息，最多等待多少秒后也必须触发回复"
+  }
+}
